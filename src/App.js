@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 import {
   SafeAreaView,
@@ -11,8 +11,21 @@ import {
 } from "react-native";
 
 export default function App() {
+  const [repositories, setRepositories] = useState([]);
+
   async function handleLikeRepository(id) {
-    // Implement "Like Repository" functionality
+    const response = await api.post(`repositories/${id}/like`);
+
+    const status = response.status;
+
+    if (status === 200) {
+      const repositoryIndex = repositories.findIndex(repository => repository.id );
+      const like = response.data.likes;
+      
+      const repository = repositories[repositoryIndex];
+
+      repository
+    }
   }
 
   return (
