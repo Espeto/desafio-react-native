@@ -9,9 +9,16 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
+import api from "./services/api";
 
 export default function App() {
   const [repositories, setRepositories] = useState([]);
+
+  useEffect(() => {
+    api.get('repositories').then(response => {
+      setRepositories(response.data);
+    });
+  }, []);
 
   async function handleLikeRepository(id) {
     const response = await api.post(`repositories/${id}/like`);
@@ -19,12 +26,13 @@ export default function App() {
     const status = response.status;
 
     if (status === 200) {
-      const repositoryIndex = repositories.findIndex(repository => repository.id );
-      const like = response.data.likes;
-      
-      const repository = repositories[repositoryIndex];
+      let auxRepo = repositories.slice(0);
+      const repositoryIndex = repositories.findIndex(repository => repository.id ); 
+      console.log(repositories);
 
-      repository
+      auxRepo[repositoryIndex] = response.data;
+
+      setRepositories(auxRepo);
     }
   }
 
